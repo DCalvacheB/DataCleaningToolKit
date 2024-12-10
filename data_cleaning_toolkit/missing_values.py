@@ -2,7 +2,7 @@ import pandas as pd
 from sklearn import datasets
 import random
 
-def fill_quant_cols(strategy:str, col:str)->pd.DataFrame:
+def fill_quant_cols(df, strategy:str, col:str)->pd.DataFrame:
     if strategy == "mean":
         df[col].fillna(df[col].mean(), inplace=True)
     elif strategy == "median":
@@ -10,7 +10,7 @@ def fill_quant_cols(strategy:str, col:str)->pd.DataFrame:
     elif strategy == "mode":
         df[col].fillna(df[col].mode()[0], inplace=True)
     return df
-def fill_qual_cols(strategy:str, col:str)->pd.DataFrame:
+def fill_qual_cols(df, strategy:str, col:str)->pd.DataFrame:
     if strategy == "mode":
         df[col].fillna(df[col].mode()[0], inplace=True)
     elif strategy == "ffill":
@@ -41,9 +41,9 @@ def fill_missing_values(df, strategy=["mean", 'bfill'], configs:dict=None):
         if configs is not None:
             strategy = configs.get(col, strategy[0]) if col in quant_cols else configs.get(col, strategy[1])
         if col in quant_cols:
-            df = fill_quant_cols(strategy=strategy[0], col=col)
+            df = fill_quant_cols(df=df, strategy=strategy[0], col=col)
         if col in qual_cols:
-            df = fill_qual_cols(strategy=strategy[1], col=col)
+            df = fill_qual_cols(df=df, strategy=strategy[1], col=col)
     return df
 
 
