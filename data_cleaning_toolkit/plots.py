@@ -2,6 +2,7 @@ import pandas as pd
 import numpy as np
 import plotly.graph_objects as go
 import pandas as pd 
+from data_cleaning_toolkit.utils import tools
 
 colors_cfg = {
 'Pastel Lavender': ['#E6E6FA',	(230, 230, 250)],
@@ -17,33 +18,32 @@ colors_cfg = {
 }
 
 
-def either(optn1, optn2):
-    return optn1 if optn1 is not None else optn2
+
 
 def plot_plots(df:pd.DataFrame, x_axis=None, y_axis=None, colors:list=None, title=None, darkmode=True):
     types = {'line':[np.int_, np.float64],
              'bar':[object, str]}
     traces = []
-    colors = either(colors, colors_cfg)
+    colors = tools.either(colors, colors_cfg)
     
     for n,column in enumerate(df):
         color_names = list(colors.keys())
         color = colors[color_names[n]][0] if n in range(0,10) else colors[color_names[10-n]][0]
 
         if df[column].dtype in types['line']:
-            trace = {'x':either(df.index, x_axis),
+            trace = {'x':tools.either(df.index, x_axis),
                      'y':df[column],
                      'type':'scatter',
                      'mode':'lines',
                      'name':column,
-                     'line':{'color':either(color, 'blue')}}
+                     'line':{'color':tools.either(color, 'blue')}}
         elif df[column].dtype in types['bar']:
-            trace = {'x':either(df.index, x_axis),
+            trace = {'x':tools.either(df.index, x_axis),
                      'y':df[column],
                      'type':'bar',
                      'marker':dict(color=color),
                      'name':column,
-                     'line':{'color':either(color, 'blue')}}
+                     'line':{'color':tools.either(color, 'blue')}}
         else:
             pass
         if 'trace' in locals():
@@ -51,7 +51,7 @@ def plot_plots(df:pd.DataFrame, x_axis=None, y_axis=None, colors:list=None, titl
     
     if not traces:
         return None
-    layout_lines = go.Layout(title=dict(text=either(title, 'Plot Title'),
+    layout_lines = go.Layout(title=dict(text=tools.either(title, 'Plot Title'),
                                         font= {"color": "white"} if darkmode else None,
                                         y= 0.9,                   # Vertical position (0 = bottom, 1 = top)
                                         x= 0.5,                   # Horizontal position (0 = left, 1 = right)
@@ -70,7 +70,7 @@ def plot_plots(df:pd.DataFrame, x_axis=None, y_axis=None, colors:list=None, titl
                                         #  y=0.8
                                          ),
                             plot_bgcolor='rgb(17,17,17)' if darkmode else None,
-                            paper_bgcolor ='rgb(10,10,10)' if darkmode else None
+                            paper_bgcolor ='rgb(10,10,10)' if darkmode else None,
                              )
     
     fig = go.Figure(data=traces, layout=layout_lines)
