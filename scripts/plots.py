@@ -2,7 +2,7 @@ import pandas as pd
 import numpy as np
 import plotly.graph_objects as go
 import pandas as pd 
-from data_cleaning_toolkit.utils import tools
+from scripts.utils import tools
 
 colors_cfg = {
 'Pastel Lavender': ['#E6E6FA',	(230, 230, 250)],
