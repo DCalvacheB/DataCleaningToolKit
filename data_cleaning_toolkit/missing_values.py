@@ -106,7 +106,7 @@ def missing_values_summary(df):
     missing_summary = pd.DataFrame({
         "Column": df.columns,
         "Missing Values": df.isnull().sum(),
-        "Percentage": (df.isnull().mean() * 100)
+        "Percentage": round(df.isnull().mean() * 100, 4)
     })
     missing_summary.reset_index(inplace=True, drop=True)
     if not missing_summary.empty:
